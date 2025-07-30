@@ -18,11 +18,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'nis',
         'name',
         'username',
         'password',
         'role',
     ];
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'nis', 'nis');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

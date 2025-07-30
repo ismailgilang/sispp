@@ -13,8 +13,12 @@ class Spp extends Model
     protected $table = 'spp';
 
     protected $fillable = [
+        'nis',
         'tahun',
         'nominal',
+        'bulan',
+        'status',
+        'jatuh_tempo',
     ];
 
     public function tagihan(): HasMany

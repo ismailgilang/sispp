@@ -32,9 +32,6 @@
                     <x-nav-link :href="route('Spp.index')" :active="request()->routeIs('Spp.index')">
                         {{ __('SPP') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('Tagihan.index')" :active="request()->routeIs('Tagihan.index')">
-                        {{ __('Tagihan SPP') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('Pembayaran.index')" :active="request()->routeIs('Pembayaran.index')">
                         {{ __('Pembayaran') }}
                     </x-nav-link>
@@ -109,9 +106,6 @@
             @endif
             <x-responsive-nav-link :href="route('Spp.index')" :active="request()->routeIs('Spp.index')">
                 {{ __('SPP') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('Tagihan.index')" :active="request()->routeIs('Tagihan.index')">
-                {{ __('Tagihan SPP') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('Pembayaran.index')" :active="request()->routeIs('Pembayaran.index')">
                 {{ __('Pembayaran') }}

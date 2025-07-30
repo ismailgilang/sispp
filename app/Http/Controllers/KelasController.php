@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jurusan;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
@@ -11,7 +13,9 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        $data = Kelas::all();
+        $jurusan = Jurusan::all();
+        return view('menu.kelas.index', compact('data', 'jurusan'));
     }
 
     /**
@@ -27,7 +31,21 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi data
+        $validated = $request->validate([
+            'nama_kelas' => 'nullable|string|max:100|',
+            'jurusan' => 'required|string|max:100',
+            'angkatan' => 'required|string|max:50',
+        ]);
+
+        // Simpan ke database
+        Kelas::create([
+            'nama_kelas' => $validated['nama_kelas'] ?? null,
+            'id_jurusan' => $validated['jurusan'],
+            'angkatan' => $validated['angkatan'],
+        ]);
+
+        return redirect()->route('Kelas.index')->with('success', 'Kelas berhasil ditambahkan');
     }
 
     /**
@@ -43,7 +61,9 @@ class KelasController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $kelas = Kelas::find($id);
+        $jurusan = Jurusan::all();
+        return view('menu.kelas.edit', compact('kelas', 'jurusan'));
     }
 
     /**
@@ -51,7 +71,20 @@ class KelasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nama_kelas' => 'required|string|max:50',
+            'jurusan' => 'required|exists:jurusan,id',
+            'angkatan' => 'required|digits:4',
+        ]);
+
+        $kelas = Kelas::findOrFail($id);
+        $kelas->update([
+            'nama_kelas' => $validated['nama_kelas'],
+            'id_jurusan' => $validated['jurusan'],
+            'angkatan' => $validated['angkatan'],
+        ]);
+
+        return redirect()->route('Kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
     }
 
     /**
@@ -59,6 +92,8 @@ class KelasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Kelas::find($id);
+        $data->delete();
+        return redirect()->route('Kelas.index')->with('success', 'Data Kelas berhasil dihapus');
     }
 }

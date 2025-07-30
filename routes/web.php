@@ -19,11 +19,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('Users', UsersController::class);
+
 Route::resource('Jurusan', JurusanController::class);
+
 Route::resource('Kelas', KelasController::class);
+
 Route::resource('Siswa', SiswaController::class);
+Route::get('/edit/siswa/{nis}', [SiswaController::class, 'edit'])->name('Edit.siswa');
+Route::put('/update/siswa/{nis}', [SiswaController::class, 'update'])->name('Update.siswa');
+Route::delete('/hapus/siswa/{nis}', [SiswaController::class, 'destroy'])->name('Hapus.siswa');
+
 Route::resource('Spp', SppController::class);
-Route::resource('Tagihan', TagihanSppController::class);
+Route::post('/store/spp/', [SppController::class, 'store2'])->name('store.spp');
+Route::get('/bayar/spp/{id}', [SppController::class, 'bayar'])->name('bayar.spp');
+Route::put('/bayar/spp/{id}', [SppController::class, 'bayar2'])->name('update.bayar');
+
 Route::resource('Pembayaran', PembayaranController::class);
 
 Route::middleware('auth')->group(function () {
@@ -32,4 +42,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

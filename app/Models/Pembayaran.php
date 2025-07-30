@@ -13,7 +13,7 @@ class Pembayaran extends Model
     protected $table = 'pembayaran';
 
     protected $fillable = [
-        'id_tagihan',
+        'id_spp',
         'tgl_bayar',
         'jumlah_bayar',
         'metode_pembayaran',
@@ -21,13 +21,13 @@ class Pembayaran extends Model
         'id_user',
     ];
 
-    public function tagihan(): BelongsTo
-    {
-        return $this->belongsTo(TagihanSpp::class, 'id_tagihan');
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function spp(): BelongsTo
+    {
+        return $this->belongsTo(Spp::class, 'id_spp');
     }
 }

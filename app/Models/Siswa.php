@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Siswa extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $table = 'siswa';
     protected $primaryKey = 'nis';
@@ -18,25 +18,25 @@ class Siswa extends Model
 
     protected $fillable = [
         'nis',
-        'user_id',
         'nama',
         'id_kelas',
         'alamat',
         'no_telp',
     ];
 
-    public function user(): BelongsTo
+    public function tagihan(): HasMany
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasMany(TagihanSpp::class, 'nis');
     }
-
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class, 'id_kelas');
     }
 
-    public function tagihan(): HasMany
+    protected static function booted()
     {
-        return $this->hasMany(TagihanSpp::class, 'nis');
+        static::deleting(function ($siswa) {
+            User::where('nis', $siswa->nis)->delete();
+        });
     }
 }
