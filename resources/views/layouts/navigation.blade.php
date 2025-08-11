@@ -28,13 +28,22 @@
                         <x-nav-link :href="route('Siswa.index')" :active="request()->routeIs('Siswa.index')">
                             {{ __('Siswa') }}
                         </x-nav-link>
-                    @endif
-                    <x-nav-link :href="route('Spp.index')" :active="request()->routeIs('Spp.index')">
+                         <x-nav-link :href="route('Spp.index')" :active="request()->routeIs('Spp.index')">
                         {{ __('SPP') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('Pembayaran.index')" :active="request()->routeIs('Pembayaran.index')">
-                        {{ __('Pembayaran') }}
-                    </x-nav-link>
+                        </x-nav-link>
+                        <x-nav-link :href="route('Pembayaran.index')" :active="request()->routeIs('Pembayaran.index')">
+                            {{ __('Pembayaran') }}
+                        </x-nav-link>
+                    @endif
+                    @if (Auth::user()->role === 'siswa')
+                        <x-nav-link :href="route('user.spp')" :active="request()->routeIs('user.spp')">
+                        {{ __('Tagihan SPP') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('user.pembayaran')" :active="request()->routeIs('user.pembayaran')">
+                            {{ __('Hasil Pembayaran') }}
+                        </x-nav-link>
+                    @endif
+                   
                 </div>
             </div>
 

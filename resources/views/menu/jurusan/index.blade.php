@@ -39,9 +39,9 @@
                                 @forelse ($data as $user)
                                     <tr class="user-row">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap nis">{{ $user->kode_jurusan }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap name">{{ $user->nama_jurusan }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap username">{{ $user->created_at }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap kode_jurusan">{{ $user->kode_jurusan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap nama_jurusan">{{ $user->nama_jurusan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap created_at">{{ $user->created_at }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex gap-4 items-center justify-center w-full">
                                                 <a href="{{ route('Jurusan.edit', $user->id) }}" class="border border-yellow-500 bg-yellow-500 px-4 py-1 rounded text-white hover:bg-yellow-400 hover:border-yellow-400">Edit</a>
@@ -73,7 +73,7 @@
                                     </x-modal>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data pengguna</td>
+                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data Jurusan</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -210,15 +210,13 @@
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
             filteredRows = allRows.filter(row => {
-                const nis = row.querySelector('.nis').textContent.toLowerCase();
-                const name = row.querySelector('.name').textContent.toLowerCase();
-                const username = row.querySelector('.username').textContent.toLowerCase();
-                const role = row.querySelector('.role').textContent.toLowerCase();
-                
+                const nis = row.querySelector('.kode_jurusan').textContent.toLowerCase();
+                const name = row.querySelector('.nama_jurusan').textContent.toLowerCase();
+                const username = row.querySelector('.created_at').textContent.toLowerCase();        
+                        
                 return nis.includes(searchTerm) || 
                        name.includes(searchTerm) || 
-                       username.includes(searchTerm) || 
-                       role.includes(searchTerm);
+                       username.includes(searchTerm)
             });
             
             currentPage = 1;

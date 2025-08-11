@@ -15,6 +15,8 @@
                             @csrf
                             @method('PUT')
 
+                             <h2 class="text-lg font-medium text-gray-900">Edit Data Kelas</h2>
+
                             <div class="mt-6">
                                 <x-input-label for="nama_kelas" value="Nama Kelas" />
                                 <x-text-input 

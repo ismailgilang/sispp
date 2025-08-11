@@ -11,11 +11,11 @@
             <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
                 <div class="flex flex-col justify-center mb-4">
                     <div class="flex justify-between items-center mb-4">
-                        <form method="POST" action="{{ route('update.bayar', $data->id) }}" class="p-6 w-full">
+                        <form method="POST" action="{{ route('update.bayar', $data->id) }}" class="p-6 w-full" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
-                            <h2 class="text-lg font-medium text-gray-900 mb-4">Edit Data Siswa</h2>
+                            <h2 class="text-lg font-medium text-gray-900 mb-4">Pembayan SPP</h2>
 
                             <!-- Bagian Tagihan Siswa -->
                             <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg mb-6">
@@ -95,7 +95,8 @@
                                 <!-- Metode Pembayaran -->
                                 <div class="mt-4">
                                     <x-input-label for="metode_pembayaran" value="Metode Pembayaran" />
-                                    <select id="metode_pembayaran" name="metode_pembayaran" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    <select id="metode_pembayaran" name="metode_pembayaran"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                                         <option value="">-- Pilih Metode --</option>
                                         <option value="cash" {{ old('metode_pembayaran', $data->metode_pembayaran) == 'cash' ? 'selected' : '' }}>Cash</option>
                                         <option value="transfer" {{ old('metode_pembayaran', $data->metode_pembayaran) == 'transfer' ? 'selected' : '' }}>Transfer</option>
@@ -103,20 +104,45 @@
                                     <x-input-error :messages="$errors->get('metode_pembayaran')" class="mt-2" />
                                 </div>
 
+                                {{-- Pesan untuk cash --}}
+                                <div id="cashMessage" class="hidden mt-3 p-3 bg-green-100 text-green-700 rounded-md">
+                                    Silakan berikan uang kepada pihak TU.
+                                </div>
+
+                                {{-- Card untuk transfer --}}
+                                <div id="transferCard" class="hidden mt-3 p-4 bg-blue-100 text-blue-800 rounded-md shadow">
+                                    <h4 class="font-bold mb-2">Informasi Rekening Transfer</h4>
+                                    <p>Bank: BCA</p>
+                                    <p>No. Rekening: 1234567890</p>
+                                    <p>Atas Nama: Sekolah ABC</p>
+                                </div>
+
                                 <!-- Keterangan -->
                                 <div class="mt-4">
-                                    <x-input-label for="keterangan" value="Keterangan" />
-                                    <textarea id="keterangan" name="keterangan" rows="3"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('keterangan', $data->keterangan) }}</textarea>
+                                    <x-input-label for="keterangan" value="Bukti Pembayaran" />
+                                    <input 
+                                        id="keterangan" 
+                                        name="keterangan" 
+                                        type="file" 
+                                        class="mt-1 px-2 py-2 block w-full border-gray-300 rounded-md shadow-sm" 
+                                        required
+                                    >
                                     <x-input-error :messages="$errors->get('keterangan')" class="mt-2" />
                                 </div>
                             </div>
 
                             <!-- Tombol -->
                             <div class="mt-6 flex justify-end">
-                                <x-secondary-button x-on:click="$dispatch('close')">
+                                @if (Auth::user()->role === 'admin')
+                                <x-secondary-button onclick="window.location='{{ route('Spp.index') }}'">
                                     Batal
                                 </x-secondary-button>
+                                @endif
+                                 @if (Auth::user()->role === 'siswa')
+                                <x-secondary-button onclick="window.location='{{ route('user.spp') }}'">
+                                    Batal
+                                </x-secondary-button>
+                                @endif
                                 <x-primary-button class="ml-3">
                                     Update
                                 </x-primary-button>
@@ -127,4 +153,22 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const metodePembayaran = document.getElementById('metode_pembayaran');
+            const cashMessage = document.getElementById('cashMessage');
+            const transferCard = document.getElementById('transferCard');
+
+            function toggleInfo() {
+                const selected = metodePembayaran.value;
+                cashMessage.classList.toggle('hidden', selected !== 'cash');
+                transferCard.classList.toggle('hidden', selected !== 'transfer');
+            }
+
+            metodePembayaran.addEventListener('change', toggleInfo);
+
+            // Jalankan sekali saat load agar sesuai old value
+            toggleInfo();
+        });
+    </script>
 </x-app-layout>

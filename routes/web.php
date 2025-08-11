@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\SppController;
-use App\Http\Controllers\TagihanSppController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +14,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('menu.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::resource('Users', UsersController::class);
 
@@ -33,6 +33,9 @@ Route::resource('Spp', SppController::class);
 Route::post('/store/spp/', [SppController::class, 'store2'])->name('store.spp');
 Route::get('/bayar/spp/{id}', [SppController::class, 'bayar'])->name('bayar.spp');
 Route::put('/bayar/spp/{id}', [SppController::class, 'bayar2'])->name('update.bayar');
+
+Route::get('/user/spp', [SppController::class, 'index2'])->name('user.spp');
+Route::get('/user/pembayaran', [PembayaranController::class, 'index2'])->name('user.pembayaran');
 
 Route::resource('Pembayaran', PembayaranController::class);
 

@@ -9,6 +9,7 @@ use App\Models\Siswa;
 use App\Models\Spp;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SppController extends Controller
 {
@@ -21,6 +22,12 @@ class SppController extends Controller
         $data2 = Jurusan::all();
         $data3 = Siswa::all();
         return view('menu.spp.index', compact('data', 'data2', 'data3'));
+    }
+
+    public function index2()
+    {
+        $data = Spp::where('nis', Auth::user()->nis)->get();
+        return view('menu.user.spp.index', compact('data'));
     }
 
     /**
@@ -106,7 +113,8 @@ class SppController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Spp::find($id);
+        return view('menu.spp.edit', compact('data'));
     }
 
     public function bayar(string $id)
@@ -122,7 +130,7 @@ class SppController extends Controller
             'tanggal_bayar'     => 'nullable|date',
             'jumlah_bayar'      => 'nullable|numeric|min:0',
             'metode_pembayaran' => 'nullable|in:cash,transfer',
-            'keterangan'        => 'nullable|string|max:255',
+            'keterangan' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         // 2. Cari data SPP berdasarkan ID
@@ -139,12 +147,19 @@ class SppController extends Controller
             $user = User::where('nis', $spp->nis)->first();
             $id_user = $user ? $user->id : null;
 
+            $filePath = null;
+
+            if ($request->hasFile('keterangan')) {
+                // Simpan file ke storage/app/public/keterangan
+                $filePath = $request->file('keterangan')->store('keterangan', 'public');
+            }
+
             Pembayaran::create([
                 'id_spp'            => $spp->id,
                 'tgl_bayar'         => $validated['tanggal_bayar'],
                 'jumlah_bayar'      => $validated['jumlah_bayar'],
                 'metode_pembayaran' => $validated['metode_pembayaran'],
-                'keterangan'        => $validated['keterangan'] ?? null,
+                'keterangan'        => $filePath, // simpan path file
                 'id_user'           => $id_user,
             ]);
         }
@@ -157,7 +172,30 @@ class SppController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validasi input
+        $validated = $request->validate([
+            'nis'          => 'nullable|string|max:50',
+            'tahun'        => 'required|string|max:4',
+            'bulan'       => 'required|integer|between:1,12',
+            'nominal'      => 'required|numeric',
+            'jatuh_tempo'  => 'nullable|date',
+            'status'       => 'required|in:lunas,belum dibayar',
+        ]);
+
+        // Ambil data berdasarkan ID
+        $spp = Spp::findOrFail($id);
+
+        // Update data
+        $spp->nis         = $validated['nis'];
+        $spp->tahun       = $validated['tahun'];
+        $spp->bulan       = $validated['bulan'];
+        $spp->nominal     = $validated['nominal'];
+        $spp->jatuh_tempo = $validated['jatuh_tempo'] ?? $spp->jatuh_tempo;
+        $spp->status      = $validated['status'];
+        $spp->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('Spp.index')->with('success', 'Data SPP berhasil diperbarui.');
     }
 
     /**
@@ -165,6 +203,8 @@ class SppController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Spp::find($id);
+        $data->delete();
+        return redirect()->route('Spp.index')->with('success', 'Data SPP berhasil Dihapus.');
     }
 }

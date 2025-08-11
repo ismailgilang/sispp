@@ -48,14 +48,24 @@
                                     <tr class="user-row">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap nis">{{ $user->nis }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap name">{{ $user->bulan }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap name">{{ $user->tahun }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap username">{{ $user->nominal }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap username">{{ $user->jatuh_tempo }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap username">{{ $user->status }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap bulan">{{ $user->bulan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap tahun">{{ $user->tahun }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap nominal">{{ $user->nominal }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap jatuh">{{ $user->jatuh_tempo }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if ($user->status === 'lunas')
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Lunas
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                    Belum Lunas
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex gap-4 items-center justify-center w-full">
-                                                @if ($user->status === 'belum_dibayar')
+                                                @if ($user->status === 'belum dibayar')
                                                     <a href="{{ route('bayar.spp', $user->id) }}" class="border border-green-500 bg-green-500 px-4 py-1 rounded text-white hover:bg-green-400 hover:border-green-400">Bayar</a>
                                                 @endif
                                                 <a href="{{ route('Spp.edit', $user->id) }}" class="border border-yellow-500 bg-yellow-500 px-4 py-1 rounded text-white hover:bg-yellow-400 hover:border-yellow-400">Edit</a>
@@ -87,7 +97,7 @@
                                     </x-modal>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data pengguna</td>
+                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data SPP</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -345,14 +355,18 @@
             
             filteredRows = allRows.filter(row => {
                 const nis = row.querySelector('.nis').textContent.toLowerCase();
-                const name = row.querySelector('.name').textContent.toLowerCase();
-                const username = row.querySelector('.username').textContent.toLowerCase();
-                const role = row.querySelector('.role').textContent.toLowerCase();
+                const name = row.querySelector('.bulan').textContent.toLowerCase();
+                const username = row.querySelector('.tahun').textContent.toLowerCase();
+                const nominal = row.querySelector('.nominal').textContent.toLowerCase();
+                const jatuh = row.querySelector('.jatuh').textContent.toLowerCase();
+                const status = row.querySelector('.status').textContent.toLowerCase();
                 
                 return nis.includes(searchTerm) || 
                        name.includes(searchTerm) || 
                        username.includes(searchTerm) || 
-                       role.includes(searchTerm);
+                       nominal.includes(searchTerm) ||
+                       jatuh.includes(searchTerm) || 
+                       status.includes(searchTerm);
             });
             
             currentPage = 1;

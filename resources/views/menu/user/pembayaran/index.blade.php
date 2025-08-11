@@ -33,7 +33,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pembayar</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Pada</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    {{-- <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th> --}}
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -57,7 +57,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap name">{{ $user->user->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap created_at">{{ $user->created_at }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        {{-- <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex gap-4 items-center justify-center w-full">
                                                 <a href="{{ route('Pembayaran.edit', $user->id) }}" class="border border-yellow-500 bg-yellow-500 px-4 py-1 rounded text-white hover:bg-yellow-400 hover:border-yellow-400">Edit</a>
                                                 <x-danger-button 
@@ -65,7 +65,7 @@
                                                     Hapus
                                                 </x-danger-button>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     <x-modal name="confirm-delete-{{ $user->id }}" :show="false" maxWidth="sm">
                                         <div class="p-6">

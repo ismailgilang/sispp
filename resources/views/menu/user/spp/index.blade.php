@@ -2,7 +2,7 @@
     <div class="py-6 px-4 sm:px-6 lg:px-8">
         <!-- Header Welcome -->
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen Pembayaran SPP</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Manajemen SPP</h1>
         </div>
 
         <!-- Main Content -->
@@ -11,7 +11,7 @@
             <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
                 <div class="flex flex-col justify-center mb-4">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-semibold text-gray-900">Tabel Pembayaran</h2>
+                        <h2 class="text-lg font-semibold text-gray-900">Tabel SPP</h2>
                     </div>
                     
                     <!-- Search Input -->
@@ -26,13 +26,12 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nis</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pembayaran</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Pembayaran</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metode Pembayaran</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pembayar</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Pada</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bulan</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tahun</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nominal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jatuh Tempo</th>
+                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
@@ -40,37 +39,36 @@
                                 @forelse ($data as $user)
                                     <tr class="user-row">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap nis">{{ $user->spp->nis }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap tgl">{{ $user->tgl_bayar }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap jumlah">{{ $user->jumlah_bayar }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap metode">{{ $user->metode_pembayaran }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap keterangan">
-                                            @if($user->keterangan)
-                                                <a href="{{ asset('storage/' . $user->keterangan) }}" 
-                                                target="_blank" 
-                                                class="text-blue-600 hover:underline">
-                                                    Preview File
-                                                </a>
+                                        <td class="px-6 py-4 whitespace-nowrap nis">{{ $user->nis }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap bulan">{{ $user->bulan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap tahun">{{ $user->tahun }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap nominal">{{ $user->nominal }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap jatuh">{{ $user->jatuh_tempo }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if ($user->status === 'lunas')
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Lunas
+                                                </span>
                                             @else
-                                                <span class="text-gray-500 italic">Tidak ada file</span>
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                    Belum Lunas
+                                                </span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap name">{{ $user->user->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap created_at">{{ $user->created_at }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex gap-4 items-center justify-center w-full">
-                                                <a href="{{ route('Pembayaran.edit', $user->id) }}" class="border border-yellow-500 bg-yellow-500 px-4 py-1 rounded text-white hover:bg-yellow-400 hover:border-yellow-400">Edit</a>
-                                                <x-danger-button 
-                                                   x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-delete-{{ $user->id }}')">
-                                                    Hapus
-                                                </x-danger-button>
+                                                @if ($user->status === 'belum dibayar')
+                                                    <a href="{{ route('bayar.spp', $user->id) }}" class="border border-green-500 bg-green-500 px-4 py-1 rounded text-white hover:bg-green-400 hover:border-green-400">Bayar</a>
+                                                @else
+                                                    <span>-</span>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
                                     <x-modal name="confirm-delete-{{ $user->id }}" :show="false" maxWidth="sm">
                                         <div class="p-6">
                                             <h2 class="text-lg font-medium text-gray-900">Konfirmasi Hapus</h2>
-                                            <p class="mt-2 text-sm text-gray-600">Apakah Anda yakin ingin menghapus Pembayaran<b> dengan NIS {{ $user->spp->nis }}</b>?</p>
+                                            <p class="mt-2 text-sm text-gray-600">Apakah Anda yakin ingin menghapus SPP dengan NIS {{ $user->nis }}</b>?</p>
                                             <div class="mt-4 flex justify-end space-x-2">
                                                 <button 
                                                     type="button" 
@@ -78,7 +76,7 @@
                                                     class="px-4 py-2 border rounded-md">
                                                     Batal
                                                 </button>
-                                                <form method="POST" action="{{ route('Pembayaran.destroy', $user->id) }}">
+                                                <form method="POST" action="{{ route('Spp.destroy', $user->id) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <x-danger-button type="submit">Ya, Hapus</x-danger-button>
@@ -88,7 +86,7 @@
                                     </x-modal>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data Pembayaran</td>
+                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data SPP</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -111,6 +109,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // Variabel global untuk pagination
         let currentPage = 1;
@@ -196,18 +195,18 @@
             
             filteredRows = allRows.filter(row => {
                 const nis = row.querySelector('.nis').textContent.toLowerCase();
-                const name = row.querySelector('.tgl').textContent.toLowerCase();
-                const username = row.querySelector('.jumlah').textContent.toLowerCase();
-                const role = row.querySelector('.metode').textContent.toLowerCase();
-                const nama = row.querySelector('.name').textContent.toLowerCase();
-                const created_at = row.querySelector('.created_at').textContent.toLowerCase();
+                const name = row.querySelector('.bulan').textContent.toLowerCase();
+                const username = row.querySelector('.tahun').textContent.toLowerCase();
+                const nominal = row.querySelector('.nominal').textContent.toLowerCase();
+                const jatuh = row.querySelector('.jatuh').textContent.toLowerCase();
+                const status = row.querySelector('.status').textContent.toLowerCase();
                 
                 return nis.includes(searchTerm) || 
                        name.includes(searchTerm) || 
                        username.includes(searchTerm) || 
-                       role.includes(searchTerm) ||
-                       name.includes(searchTerm) || 
-                       created_at.includes(searchTerm);
+                       nominal.includes(searchTerm) ||
+                       jatuh.includes(searchTerm) || 
+                       status.includes(searchTerm);
             });
             
             currentPage = 1;
