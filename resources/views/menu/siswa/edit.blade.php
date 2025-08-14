@@ -31,6 +31,20 @@
                                 <x-input-error :messages="$errors->get('nama')" class="mt-2" />
                             </div>
 
+                            <div class="mt-6">
+                                <x-input-label for="nama_ibu" value="Nama Ibu" />
+                                <x-text-input id="nama_ibu" name="nama_ibu" type="text" class="mt-1 block w-full" 
+                                    value="{{ old('nama_ibu', $siswa->nama_ibu) }}" required />
+                                <x-input-error :messages="$errors->get('nama_ibu')" class="mt-2" />
+                            </div>
+
+                            <div class="mt-6">
+                                <x-input-label for="nama_ayah" value="Nama Ayah" />
+                                <x-text-input id="nama_ayah" name="nama_ayah" type="text" class="mt-1 block w-full" 
+                                    value="{{ old('nama_ayah', $siswa->nama_ayah) }}" required />
+                                <x-input-error :messages="$errors->get('nama_ayah')" class="mt-2" />
+                            </div>
+
                             <div class="mt-4">
                                 <x-input-label for="id_kelas" value="Nama Kelas" />
                                 <select id="id_kelas" name="id_kelas" 

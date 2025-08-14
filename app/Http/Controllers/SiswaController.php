@@ -39,6 +39,8 @@ class SiswaController extends Controller
             'id_kelas' => 'required|exists:kelas,id',
             'alamat' => 'required|string|min:6',
             'no_telp' => 'required|string|max:20',
+            'nama_ibu' => 'required|string|max:100',
+            'nama_ayah' => 'required|string|max:100',
         ]);
 
         // Simpan Siswa
@@ -48,6 +50,8 @@ class SiswaController extends Controller
             'id_kelas' => $validated['id_kelas'],
             'alamat' => $validated['alamat'],
             'no_telp' => $validated['no_telp'],
+            'nama_ayah' => $validated['nama_ayah'],
+            'nama_ibu' => $validated['nama_ibu'],
         ]);
 
         // Simpan User
@@ -95,6 +99,8 @@ class SiswaController extends Controller
             'id_kelas' => 'required|exists:kelas,id',
             'alamat' => 'required|string|min:6',
             'no_telp' => 'required|string|max:20',
+            'nama_ibu' => 'required|string|max:100',
+            'nama_ayah' => 'required|string|max:100',
         ]);
 
         // Update data siswa
@@ -104,6 +110,8 @@ class SiswaController extends Controller
             'id_kelas' => $validated['id_kelas'],
             'alamat' => $validated['alamat'],
             'no_telp' => $validated['no_telp'],
+            'nama_ayah' => $validated['nama_ayah'],
+            'nama_ibu' => $validated['nama_ibu'],
         ]);
 
         // Update NIS di tabel user jika ada
@@ -120,6 +128,8 @@ class SiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Siswa::find($id);
+        $data->delete();
+        return redirect()->route('Siswa.index')->with('success', 'Siswa berhasil dihapus');
     }
 }

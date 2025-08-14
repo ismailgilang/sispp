@@ -22,6 +22,8 @@ class Siswa extends Model
         'id_kelas',
         'alamat',
         'no_telp',
+        'nama_ibu',
+        'nama_ayah'
     ];
 
     public function tagihan(): HasMany

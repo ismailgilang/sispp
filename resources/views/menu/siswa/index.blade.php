@@ -31,6 +31,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Ibu</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Ayah</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No Handphone</th>
@@ -44,6 +46,8 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap nis">{{ $user->nis }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap nama">{{ $user->nama }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap nama">{{ $user->nama_ibu }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap nama">{{ $user->nama_ayah }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap kelas">{{ $user->kelas->nama_kelas }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap alamat">{{ $user->alamat }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap telp">{{ $user->no_telp }}</td>
@@ -89,12 +93,16 @@
                     <!-- Pagination -->
                     <div class="w-full flex justify-end">
                         <div class="flex items-center justify-center gap-4 mt-4" id="paginationControls">
-                            <button id="prevPage" class="px-4 py-2 border rounded-md hover:bg-blue-500 hover:text-white" disabled>
-                                <<
+                            <button id="prevPage" class="px-3 py-3 border rounded-md hover:bg-blue-500 hover:text-white" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                </svg>
                             </button>
                             <div id="pageNumbers" class="flex space-x-2"></div>
-                            <button id="nextPage" class="px-4 py-2 border rounded-md hover:bg-blue-500 hover:text-white">
-                                >>
+                            <button id="nextPage" class="px-3 py-3 border rounded-md hover:bg-blue-500 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
                             </button>
                         </div>
                     </div>
@@ -118,6 +126,18 @@
                 <x-input-label for="nama" value="Nama Lengkap" />
                 <x-text-input id="nama" name="nama" type="text" class="mt-1 block w-full" />
                 <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+            </div>
+
+            <div class="mt-6">
+                <x-input-label for="nama_ibu" value="Nama Ibu" />
+                <x-text-input id="nama_ibu" name="nama_ibu" type="text" class="mt-1 block w-full" />
+                <x-input-error :messages="$errors->get('nama_ibu')" class="mt-2" />
+            </div>
+
+            <div class="mt-6">
+                <x-input-label for="nama_ayah" value="Nama ayah" />
+                <x-text-input id="nama_ayah" name="nama_ayah" type="text" class="mt-1 block w-full" />
+                <x-input-error :messages="$errors->get('nama_ayah')" class="mt-2" />
             </div>
 
             <div class="mt-4">
