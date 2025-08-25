@@ -38,6 +38,7 @@ Route::get('/user/spp', [SppController::class, 'index2'])->name('user.spp');
 Route::get('/user/pembayaran', [PembayaranController::class, 'index2'])->name('user.pembayaran');
 
 Route::resource('Pembayaran', PembayaranController::class);
+Route::post('/cetak/pembayaran', [PembayaranController::class, 'cetak'])->name('cetak.pembayaran');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -237,7 +237,7 @@
                             </div>
                             <div>
                                 <h3 class="text-sm font-medium text-gray-500">Nama Lengkap</h3>
-                                <p class="text-lg font-semibold text-gray-800">[Nama Siswa]</p>
+                                <p class="text-lg font-semibold text-gray-800">{{   Auth::user()->name  }}</p>
                             </div>
                         </div>
                         
@@ -248,8 +248,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-medium text-gray-500">NIS</h3>
-                                <p class="text-lg font-semibold text-gray-800">[Nomor Induk Siswa]</p>
+                                <h3 class="text-sm font-medium text-gray-500">NISN</h3>
+                                <p class="text-lg font-semibold text-gray-800">{{   Auth::user()->nis  }}</p>
                             </div>
                         </div>
                         
@@ -261,7 +261,7 @@
                             </div>
                             <div>
                                 <h3 class="text-sm font-medium text-gray-500">Kelas</h3>
-                                <p class="text-lg font-semibold text-gray-800">[Kelas dan Jurusan]</p>
+                                <p class="text-lg font-semibold text-gray-800">{{   Auth::user()->siswa->kelas->nama_kelas  }}</p>
                             </div>
                         </div>
                     </div>
@@ -275,80 +275,27 @@
                     <div class="p-6">
                         <div class="mb-6">
                             <h3 class="text-sm font-medium text-gray-500 mb-2">Status Pembayaran Bulan Ini</h3>
-                            <div class="flex items-center">
-                                <span class="px-3 py-1 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-800">Lunas</span>
-                                <span class="ml-2 text-gray-600">Per {{ now()->format('d F Y') }}</span>
+                            <div class="flex items-center gap-2">
+                                @foreach ($tagihanList2 as $tagihan2)
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-800">{{ $tagihan2->status }}</span>
+                                    <p class="text-sm text-green-600">
+                                        Lunas untuk bulan {{ \Carbon\Carbon::parse($tagihan2->created_at)->translatedFormat('F Y') }}
+                                    </p>
+                                @endforeach
                             </div>
                         </div>
-                        
                         <div class="mb-6">
                             <h3 class="text-sm font-medium text-gray-500 mb-2">Total Tagihan</h3>
-                            <p class="text-2xl font-bold text-gray-800">Rp 350,000</p>
-                            <p class="text-xs text-gray-500 mt-1">Per bulan</p>
+                            <p class="text-2xl font-bold text-gray-800">
+                                {{ $totalTagihan > 0 ? 'Rp. ' . number_format($totalTagihan, 0, ',', '.') : 'Tidak ada tagihan' }}
+                            </p>
+                            @foreach ($tagihanList as $tagihan)
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Per bulan {{ $tagihan->bulan }} {{ $tagihan->tahun }}
+                                </p>
+                            @endforeach
+
                         </div>
-                        
-                        <div>
-                            <h3 class="text-sm font-medium text-gray-500 mb-3">Riwayat Pembayaran</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-700">Januari 2023</span>
-                                    <span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Lunas</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-700">Februari 2023</span>
-                                    <span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Lunas</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-700">Maret 2023</span>
-                                    <span class="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Pending</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quick Actions -->
-                <div class="md:col-span-2 bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="bg-indigo-600 px-6 py-4">
-                        <h2 class="text-xl font-semibold text-white">Aksi Cepat</h2>
-                    </div>
-                    <div class="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <a href="#" class="group p-4 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-colors text-center">
-                            <div class="mx-auto h-10 w-10 text-indigo-600 group-hover:text-indigo-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18V7a1 1 0 00-1-1H4a1 1 0 00-1 1v3zm0 2v5a1 1 0 001 1h16a1 1 0 001-1v-5H3z" />
-                                </svg>
-                            </div>
-                            <p class="mt-2 text-sm font-medium text-gray-800 group-hover:text-indigo-700">Bayar SPP</p>
-                        </a>
-                        
-                        <a href="#" class="group p-4 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors text-center">
-                            <div class="mx-auto h-10 w-10 text-blue-600 group-hover:text-blue-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </div>
-                            <p class="mt-2 text-sm font-medium text-gray-800 group-hover:text-blue-700">Riwayat SPP</p>
-                        </a>
-                        
-                        <a href="#" class="group p-4 rounded-lg bg-teal-50 hover:bg-teal-100 transition-colors text-center">
-                            <div class="mx-auto h-10 w-10 text-teal-600 group-hover:text-teal-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </div>
-                            <p class="mt-2 text-sm font-medium text-gray-800 group-hover:text-teal-700">Profil Saya</p>
-                        </a>
-                        
-                        <a href="#" class="group p-4 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors text-center">
-                            <div class="mx-auto h-10 w-10 text-purple-600 group-hover:text-purple-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </div>
-                            <p class="mt-2 text-sm font-medium text-gray-800 group-hover:text-purple-700">Pengaturan</p>
-                        </a>
                     </div>
                 </div>
             </div>

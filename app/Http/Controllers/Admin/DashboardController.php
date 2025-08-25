@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use App\Models\Spp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -51,6 +52,21 @@ class DashboardController extends Controller
         $sppbelum = Spp::where('status', 'belum dibayar')->count();
         $spplunas = Spp::where('status', 'lunas')->count();
 
-        return view('menu.index', compact('bulanSekarang', 'tahunSekarang', 'siswa', 'siswaSekarang', 'kelas', 'sppbelum', 'totalBelum', 'totalLunas', 'spplunas'));
+        $user = Auth::user();
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $tagihanList = Spp::where('nis', $user->nis)
+            ->where('status', 'belum dibayar')
+            ->get();
+
+        $tagihanList2 = Spp::where('nis', $user->nis)
+            ->where('status', 'lunas')
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->get();
+
+        $totalTagihan = $tagihanList->sum('nominal');
+
+        return view('menu.index', compact('bulanSekarang', 'tahunSekarang', 'siswa', 'siswaSekarang', 'kelas', 'sppbelum', 'totalBelum', 'totalLunas', 'spplunas', 'tagihanList', 'tagihanList2', 'totalTagihan'));
     }
 }

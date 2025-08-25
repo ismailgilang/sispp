@@ -4,7 +4,7 @@
             <!-- Logo -->
             <div class="flex items-center space-x-6">
                 <a href="{{ route('dashboard') }}" class="text-2xl font-bold text-white hover:text-indigo-200 transition-colors duration-300">
-                    SPP
+                    <img src="{{ asset('images/login/lg.jpg') }}" class="w-10 rounded-full" alt="">
                 </a>
 
                 <!-- Navigation Links -->
