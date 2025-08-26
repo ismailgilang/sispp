@@ -57,7 +57,7 @@ class DashboardController extends Controller
         $endOfMonth = Carbon::now()->endOfMonth();
 
         $tagihanList = Spp::where('nis', $user->nis)
-            ->where('status', 'belum dibayar')
+            ->where('status', 'belum_dibayar')
             ->get();
 
         $tagihanList2 = Spp::where('nis', $user->nis)
