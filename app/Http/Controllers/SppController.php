@@ -125,6 +125,7 @@ class SppController extends Controller
 
     public function bayar2(Request $request, string $id)
     {
+        $user = Auth::user();
         $validated = $request->validate([
             'status'            => 'required|in:belum_dibayar,lunas',
             'tanggal_bayar'     => 'nullable|date',
@@ -163,8 +164,11 @@ class SppController extends Controller
                 'id_user'           => $id_user,
             ]);
         }
-
-        return redirect()->route('Spp.index')->with('success', 'Data SPP dan pembayaran berhasil diperbarui.');
+        if ($user->role === "admin") {
+            return redirect()->route('Spp.index')->with('success', 'Data SPP dan pembayaran berhasil diperbarui.');
+        } else {
+            return redirect()->route('user.spp')->with('success', 'Data SPP dan pembayaran berhasil diperbarui.');
+        }
     }
 
     /**
